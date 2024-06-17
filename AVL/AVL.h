@@ -25,9 +25,6 @@ AVLTree* createAVLTree();
 // Função para inserir um novo nó na árvore AVL
 void insertIntoAVL(AVLTree* tree, int key);
 
-// Função para buscar um nó na árvore AVL
-int searchAVL(AVLTree* tree, int key);
-
 // Função para remover um nó da árvore AVL
 void removeFromAVL(AVLTree* tree, int key);
 

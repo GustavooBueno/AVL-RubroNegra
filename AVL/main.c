@@ -46,12 +46,35 @@ int main() {
 
     // Imprime o tempo de inserção e a quantidade de rotações
     printf("Tempo de inserção: %f segundos\n", cpu_time_used);
-    printf("Quantidade de rotações: %d\n", getRotationCount());
+    printf("Quantidade de rotações para inserção: %d\n", getRotationCount());
 
-    // Imprime a árvore AVL em ordem
-    printf("Árvore AVL em ordem: ");
-    inorderTraversal(tree->root);
-    printf("\n");
+    // Fecha e reabre o arquivo para leitura dos valores para remoção
+    fclose(file);
+    file = fopen(fileName, "r");
+    if (file == NULL) {
+        perror("Erro ao abrir o arquivo");
+        destroyAVLTree(tree);
+        exit(EXIT_FAILURE);
+    }
+
+    // Reseta o contador de rotações
+    resetRotationCount();
+
+    // Inicia a contagem do tempo para remoção
+    start = clock();
+
+    // Lê valores do arquivo e os remove da árvore AVL
+    while (fscanf(file, "%d", &value) == 1) {
+        removeFromAVL(tree, value);
+    }
+
+    // Termina a contagem do tempo para remoção
+    end = clock();
+    cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+
+    // Imprime o tempo de remoção e a quantidade de rotações
+    printf("Tempo de remoção: %f segundos\n", cpu_time_used);
+    printf("Quantidade de rotações para remoção: %d\n", getRotationCount());
 
     // Libera os recursos e fecha o arquivo
     destroyAVLTree(tree);

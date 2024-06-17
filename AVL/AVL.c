@@ -111,6 +111,53 @@ void insertIntoAVL(AVLTree* tree, int key) {
     tree->root = insertNode(tree->root, key);
 }
 
+// Função para encontrar o nó com o valor mínimo
+Node* findMin(Node* node) {
+    while (node->left != NULL) {
+        node = node->left;
+    }
+    return node;
+}
+
+// Função para remover um nó da árvore AVL
+Node* deleteNode(Node* node, int key) {
+    if (node == NULL) {
+        return node;
+    }
+    if (key < node->key) {
+        node->left = deleteNode(node->left, key);
+    } else if (key > node->key) {
+        node->right = deleteNode(node->right, key);
+    } else {
+        if (node->left == NULL || node->right == NULL) {
+            Node* temp = node->left ? node->left : node->right;
+            if (temp == NULL) {
+                temp = node;
+                node = NULL;
+            } else {
+                *node = *temp;
+            }
+            free(temp);
+        } else {
+            Node* temp = findMin(node->right);
+            node->key = temp->key;
+            node->right = deleteNode(node->right, temp->key);
+        }
+    }
+    if (node == NULL) {
+        return node;
+    }
+    return balanceNode(node);
+}
+
+// Função para remover um nó da árvore AVL
+void removeFromAVL(AVLTree* tree, int key) {
+    if (tree == NULL) {
+        return;
+    }
+    tree->root = deleteNode(tree->root, key);
+}
+
 // Função para percorrer a árvore em ordem
 void inorderTraversal(Node* node) {
     if (node != NULL) {
